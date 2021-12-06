@@ -1,0 +1,13 @@
+{
+    "build": [
+        "make clean",
+        "make dependencies",
+        "mkdir build",
+        "cmake -B./build -Declipse-paho-mqtt-c_DIR=~/Documents/paho/paho.mqtt.c/install/lib/cmake/eclipse-paho-mqtt-c -S.",
+        "make -C ./build"
+    ],
+    "run": "./build/BFS",
+    "results": [
+        "results.json"
+    ]
+}
