@@ -1,0 +1,102 @@
+{
+	"name": "md",
+	"version": "1.0",
+	"blocks":
+	[
+		{
+			"name": "block1",
+
+			"monitors":
+			[
+				{
+					"name": "time_monitor",
+					"type": "time",
+					"log": [ "average" ],
+					"constructor": [ "margot::TimeUnit::MICROSECONDS", 1 ]
+				}
+			],
+
+
+			"knobs":
+			[
+				{
+					"name": "BLOCK_SIZE",
+					"type": "int",
+					"values": [ 1, 2, 4, 8, 16, 32 ]
+				},
+				{
+					"name": "PRECISION_BITS",
+					"type": "int",
+					"values": [32, 64]
+				},
+				{
+					"name": "TEXTURE_MEMORY",
+					"type": "int",
+					"values": [0, 1]
+				},
+				{
+					"name": "WORK_PER_THREAD",
+					"type": "int",
+					"range": [0, 6, 1]
+				}
+			],
+
+			"agora":
+			{
+				"broker_url": "127.0.0.1:1883",
+				"broker_username": "agora",
+				"broker_password": "agora",
+				"broker_qos": 2,
+				"broker_ca": "",
+				"client_cert": "",
+				"client_key": "",
+        		"number_configurations_per_iteration": 50,
+        		"number_observations_per_configuration": 2,
+        		"max_number_iteration": 50,
+				"clustering_plugin": "cluster",
+				"clustering_parameters":
+				[
+					{"algorithm": "kmeans"},
+          			{"num_clusters":1}
+				],
+				"doe_plugin": "doe",
+				"doe_parameters":
+				[
+					{"algorithm": "full-factorial"}
+				]
+			},
+
+			"metrics":
+			[
+				{
+					"name": "timing",
+					"type": "float",
+					"distribution": "yes",
+					"observed_by": "time_monitor",
+					"reactive_inertia": 0,
+          			"prediction_plugin": "model_plus",
+          			"prediction_parameters": 
+					[
+            			{
+              				"quality_threshold": "{'r2':0.8}"
+            			}
+          			]
+				}
+			],
+
+			"extra-functional_requirements":
+			[
+				{
+					"name":"default",
+					"minimize":
+					{
+						"geometric_mean":
+						[
+							{"timing": 1}
+						]
+					}
+				}
+			]
+		}
+	]
+}
